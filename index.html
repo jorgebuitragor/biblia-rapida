@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblia Rápida</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-spine"></div>
+  <h1 class="cover-title">Biblia Rápida</h1>
+  <p class="cover-sub">Busca cualquier cita al instante, aprende los 66 libros y ponte a prueba con quizzes.</p>
+</div>
+
+<main class="book">
+  <nav class="ribbon-tabs">
+    <button class="ribbon active" data-tab="buscar">Buscar</button>
+    <button class="ribbon" data-tab="leer">Leer</button>
+    <button class="ribbon" data-tab="estudiar">Estudiar</button>
+    <button class="ribbon" data-tab="quiz">Quiz</button>
+    <button class="ribbon" data-tab="progreso">Progreso</button>
+  </nav>
+
+  <div class="pages">
+    <aside class="thumb-index" id="thumb-index" hidden></aside>
+
+    <section class="page" id="page-buscar">
+      <h2 class="search-intro">¿Qué cita buscas?</h2>
+      <form class="search-form" id="search-form" autocomplete="off">
+        <div class="search-input-row">
+          <span class="search-icon"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="15.3" y1="15.3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <input type="text" id="search-input" placeholder="Juan 3:16 · amor · Sal 23" />
+          <button type="submit" aria-label="Buscar">
+            <span class="btn-label">Buscar</span>
+            <span class="btn-icon"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M4 12h15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </div>
+        <div class="search-suggest" id="search-suggest" hidden></div>
+      </form>
+      <div class="search-chips" id="search-topics"></div>
+      <div class="search-chips" id="search-chips"></div>
+      <div id="search-result"></div>
+    </section>
+
+    <section class="page" id="page-leer" hidden>
+      <div class="reader-toolbar">
+        <button class="reader-toc-btn" id="reader-toc-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="3" y="5" width="12" height="3.4" rx="1" fill="currentColor"/><rect x="3" y="10.3" width="17" height="3.4" rx="1" fill="currentColor" opacity="0.75"/><rect x="3" y="15.6" width="9" height="3.4" rx="1" fill="currentColor" opacity="0.55"/></svg> Índice</button>
+        <button class="reader-current" id="reader-current-btn">
+          <span id="reader-current-label">—</span>
+          <span class="reader-page-indicator" id="reader-page-indicator" hidden></span>
+        </button>
+      </div>
+
+      <div class="reader-picker" id="reader-picker" hidden>
+        <div class="picker-head">
+          <span>Elige un libro y capítulo</span>
+          <button class="picker-close" id="reader-picker-close" aria-label="Cerrar índice"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="book-picker-grid" id="reader-book-grid"></div>
+        <div class="chapter-grid" id="reader-chapters" hidden></div>
+      </div>
+
+      <div class="reader-stage" id="reader-stage">
+        <button class="page-arrow prev" id="reader-prev" aria-label="Capítulo anterior"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="reader-page-wrap" id="reader-page-wrap">
+          <div id="reader-content"></div>
+          <p class="reader-swipe-hint"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Desliza para pasar de página <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+        </div>
+        <button class="page-arrow next" id="reader-next" aria-label="Capítulo siguiente"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </section>
+
+    <section class="page" id="page-estudiar" hidden>
+      <div id="study-content"></div>
+    </section>
+
+    <section class="page" id="page-quiz" hidden>
+      <div class="quiz-toggle">
+        <button data-mode="orden" class="active">Orden</button>
+        <button data-mode="categoria">Categoría</button>
+        <button data-mode="autor">Autor</button>
+        <button data-mode="testamento">Testamento</button>
+        <button data-mode="versiculo">Versículo</button>
+      </div>
+
+      <div class="quiz-box" id="quiz-orden">
+        <div class="question-label">¿En qué número va este libro?</div>
+        <div class="question-value" id="orden-book">—</div>
+        <input type="number" id="orden-input" min="1" max="66" placeholder="1–66">
+        <div class="action-row">
+          <button class="btn" id="orden-check">Comprobar</button>
+          <button class="btn secondary" id="orden-skip">Saltar</button>
+        </div>
+        <div class="feedback" id="orden-feedback"></div>
+        <div class="score-line" id="orden-score">Aciertos: 0 / 0</div>
+      </div>
+
+      <div class="quiz-box" id="quiz-categoria" hidden>
+        <div class="question-label">¿A qué categoría pertenece?</div>
+        <div class="question-value" id="cat-book">—</div>
+        <div class="option-grid" id="cat-options"></div>
+        <div class="feedback" id="cat-feedback"></div>
+        <div class="score-line" id="cat-score">Aciertos: 0 / 0</div>
+        <div class="action-row"><button class="btn secondary" id="cat-skip">Saltar</button></div>
+      </div>
+
+      <div class="quiz-box" id="quiz-autor" hidden>
+        <div class="question-label">¿Quién escribió este libro?</div>
+        <div class="question-value" id="autor-book">—</div>
+        <div class="option-grid" id="autor-options"></div>
+        <div class="feedback" id="autor-feedback"></div>
+        <div class="score-line" id="autor-score">Aciertos: 0 / 0</div>
+        <div class="action-row"><button class="btn secondary" id="autor-skip">Saltar</button></div>
+      </div>
+
+      <div class="quiz-box" id="quiz-testamento" hidden>
+        <div class="question-label">¿Antiguo o Nuevo Testamento?</div>
+        <div class="question-value" id="testamento-book">—</div>
+        <div class="option-grid" id="testamento-options">
+          <button data-t="AT">Antiguo Testamento</button>
+          <button data-t="NT">Nuevo Testamento</button>
+        </div>
+        <div class="feedback" id="testamento-feedback"></div>
+        <div class="score-line" id="testamento-score">Aciertos: 0 / 0</div>
+        <div class="action-row"><button class="btn secondary" id="testamento-skip">Saltar</button></div>
+      </div>
+
+      <div class="quiz-box" id="quiz-versiculo" hidden>
+        <div class="question-label">¿De qué libro es esta cita?</div>
+        <div class="question-value quote" id="versiculo-text">—</div>
+        <div class="option-grid" id="versiculo-options"></div>
+        <div class="feedback" id="versiculo-feedback"></div>
+        <div class="score-line" id="versiculo-score">Aciertos: 0 / 0</div>
+        <div class="action-row"><button class="btn secondary" id="versiculo-skip">Saltar</button></div>
+      </div>
+    </section>
+
+    <section class="page progress-panel" id="page-progreso" hidden>
+      <h3 class="progress-title">Repaso por categoría</h3>
+      <div id="progress-cats"></div>
+      <div class="best-scores" id="best-scores-box"></div>
+      <h3 class="favorites-title">Citas favoritas</h3>
+      <div id="progress-favorites"></div>
+
+      <div class="options-block">
+        <h3 class="progress-title">Opciones</h3>
+        <label class="switch-row">
+          <span>Lectura paginada, sin scroll (como Kindle)</span>
+          <span class="switch"><input type="checkbox" id="opt-paginated"><span class="switch-track"></span></span>
+        </label>
+        <label class="switch-row">
+          <span>Efecto de pasar página al cambiar de capítulo (en Leer)</span>
+          <span class="switch"><input type="checkbox" id="opt-page-turn"><span class="switch-track"></span></span>
+        </label>
+      </div>
+
+      <div class="reset-link"><a id="reset-progress">Reiniciar todo mi progreso</a></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Versículos: Biblia en Español Sencillo (dominio público / libre distribución), vía wldeh/bible-api.
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/search.js"></script>
+<script src="js/thumbindex.js"></script>
+<script src="js/reader.js"></script>
+<script src="js/study.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
